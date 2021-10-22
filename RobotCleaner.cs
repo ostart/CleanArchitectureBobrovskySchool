@@ -14,9 +14,9 @@ namespace CleanArchitectureBobrovskySchool
             _state = new State();
         }
 
-        public void Work(string fileName)
+        public void Work(string nameOfFileWithRobotCommands)
         {
-            var allCommandsList = File.ReadAllLines(fileName).ToList();
+            var allCommandsList = File.ReadAllLines(nameOfFileWithRobotCommands).ToList();
             InterpretCommands(allCommandsList);
         }
 
@@ -26,18 +26,18 @@ namespace CleanArchitectureBobrovskySchool
             {
                 var arrayOfActionsWithParameter = command.Split(' ');
                 var action = arrayOfActionsWithParameter[0];
+                var parameter = arrayOfActionsWithParameter.Length > 1 ? arrayOfActionsWithParameter[1] : null;
                 switch(action)
                 {
                     case "move":
-                        var meters = Convert.ToInt32(arrayOfActionsWithParameter[1]);
+                        var meters = Convert.ToInt32(parameter);
                         Move(meters);
                         break;
                     case "turn":
-                        var angle = Convert.ToInt32(arrayOfActionsWithParameter[1]);
+                        var angle = Convert.ToInt32(parameter);
                         Turn(angle);
                         break;
                     case "set":
-                        var parameter = arrayOfActionsWithParameter[1];
                         if (Enum.TryParse(parameter, out Tools tool))
                             Set(tool);
                         else
