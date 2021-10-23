@@ -64,7 +64,7 @@ namespace CleanArchitectureBobrovskySchool
             newPosition.Y = currentPosition.Y + meters * Math.Sin(angleInRadian);
             _state.Position = newPosition;
             
-            Console.WriteLine($"POS {_state.Position.X},{_state.Position.Y}");
+            TransferToCleaner($"POS {_state.Position.X},{_state.Position.Y}");
         }
 
         private void Turn(int angleDegrees)
@@ -72,7 +72,7 @@ namespace CleanArchitectureBobrovskySchool
             var currentAngle = _state.AngleInDegrees;
             _state.AngleInDegrees = currentAngle + angleDegrees;
 
-            Console.WriteLine($"ANGLE {_state.AngleInDegrees}");
+            TransferToCleaner($"ANGLE {_state.AngleInDegrees}");
         }
 
         private void Set(Tools tool = Tools.water)
@@ -80,19 +80,24 @@ namespace CleanArchitectureBobrovskySchool
             _state.Tool = tool;
             var stateName = Enum.GetName<Tools>(_state.Tool);
 
-            Console.WriteLine($"STATE {stateName}");
+            TransferToCleaner($"STATE {stateName}");
         } 
         
         private void Start()
         {
             var stateName = Enum.GetName<Tools>(_state.Tool);
 
-            Console.WriteLine($"START WITH {stateName}");
+            TransferToCleaner($"START WITH {stateName}");
         }
         
         private void Stop()
         {
-            Console.WriteLine("STOP");
+           TransferToCleaner("STOP");
+        }
+
+        private void TransferToCleaner(string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }
