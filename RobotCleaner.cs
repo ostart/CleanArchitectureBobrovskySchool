@@ -8,10 +8,13 @@ namespace CleanArchitectureBobrovskySchool
     class RobotCleaner
     {
         private State _state {get;set;}
+
+        private Action<string> _transferToCleaner;
         
-        public RobotCleaner()
+        public RobotCleaner(Action<string> transferDelegate)
         {
             _state = new State();
+            _transferToCleaner = transferDelegate;
         }
 
         public void Work(string nameOfFileWithRobotCommands)
@@ -64,7 +67,7 @@ namespace CleanArchitectureBobrovskySchool
             newPosition.Y = currentPosition.Y + meters * Math.Sin(angleInRadian);
             _state.Position = newPosition;
             
-            TransferToCleaner($"POS {_state.Position.X},{_state.Position.Y}");
+            _transferToCleaner($"POS {_state.Position.X},{_state.Position.Y}");
         }
 
         private void Turn(int angleDegrees)
@@ -72,7 +75,7 @@ namespace CleanArchitectureBobrovskySchool
             var currentAngle = _state.AngleInDegrees;
             _state.AngleInDegrees = currentAngle + angleDegrees;
 
-            TransferToCleaner($"ANGLE {_state.AngleInDegrees}");
+            _transferToCleaner($"ANGLE {_state.AngleInDegrees}");
         }
 
         private void Set(Tools tool = Tools.water)
@@ -80,24 +83,19 @@ namespace CleanArchitectureBobrovskySchool
             _state.Tool = tool;
             var stateName = Enum.GetName<Tools>(_state.Tool);
 
-            TransferToCleaner($"STATE {stateName}");
+            _transferToCleaner($"STATE {stateName}");
         } 
         
         private void Start()
         {
             var stateName = Enum.GetName<Tools>(_state.Tool);
 
-            TransferToCleaner($"START WITH {stateName}");
+            _transferToCleaner($"START WITH {stateName}");
         }
         
         private void Stop()
         {
-           TransferToCleaner("STOP");
-        }
-
-        private void TransferToCleaner(string message)
-        {
-            Console.WriteLine(message);
+           _transferToCleaner("STOP");
         }
     }
 }
